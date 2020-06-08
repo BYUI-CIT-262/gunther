@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gunther
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gunther
+  template:
+    metadata:
+      labels:
+        app: gunther
+    spec:
+      containers:
+      - name: gunther
+        image: gcr.io/potent-galaxy-274115/gunther
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: ".5"
+            memory: "500Mi"
+          requests:
+            cpu: ".25"
+            memory: "250Mi"
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gunther-service
+spec:
+  selector:
+    app: gunther
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gunther-loadbalancer
+spec:
+  selector:
+    app: gunther
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+   
