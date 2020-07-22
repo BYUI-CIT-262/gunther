@@ -31,5 +31,5 @@ steps:
   - run
   - --filename=app.yaml
   - --image=gcr.io/$PROJECT_ID/gunther:$SHORT_SHA
-  - --location=us-west1-c
+  - --location=us-central1-c
   - --cluster=cluster-1
